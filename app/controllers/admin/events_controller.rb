@@ -2,7 +2,7 @@ class Admin::EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
 
   def index
-    @events = Event.includes(:team).order(starts_at: :desc)
+    @events = Event.includes(:team).order(starts_at: :asc)
   end
 
   def show
