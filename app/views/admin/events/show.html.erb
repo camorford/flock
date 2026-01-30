@@ -1,0 +1,52 @@
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <div class="mb-6">
+    <%= link_to "← Back to Events", admin_events_path, class: "text-blue-600 hover:underline" %>
+  </div>
+
+  <div class="flex justify-between items-start mb-6">
+    <div>
+      <h1 class="text-2xl font-bold"><%= @event.name %></h1>
+      <p class="text-gray-600">
+        <%= @event.team.name %> · <%= @event.starts_at.strftime("%A, %B %d, %Y") %>
+      </p>
+      <p class="text-gray-500 text-sm">
+        <%= @event.starts_at.strftime("%l:%M %p") %> - <%= @event.ends_at.strftime("%l:%M %p") %>
+      </p>
+    </div>
+    <div class="flex gap-2">
+      <%= link_to "Edit", edit_admin_event_path(@event), class: "bg-gray-200 px-4 py-2 rounded hover:bg-gray-300" %>
+      <%= button_to "Delete", admin_event_path(@event), method: :delete,
+          data: { turbo_confirm: "Are you sure?" },
+          class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold">Assignments</h2>
+      <%= link_to "Add Assignment", new_admin_event_assignment_path(@event), class: "text-blue-600 hover:underline text-sm" %>
+    </div>
+
+    <% if @assignments.any? %>
+      <ul class="divide-y">
+        <% @assignments.each do |assignment| %>
+          <li class="py-3 flex justify-between items-center">
+            <div>
+              <span class="font-medium"><%= assignment.user.email_address %></span>
+              <span class="text-gray-500">as</span>
+              <span><%= assignment.position.name %></span>
+              <span class="ml-2 px-2 py-1 text-xs rounded <%= assignment_status_class(assignment) %>">
+                <%= assignment.status.capitalize %>
+              </span>
+            </div>
+            <%= button_to "Remove", admin_event_assignment_path(@event, assignment), method: :delete,
+                data: { turbo_confirm: "Remove this assignment?" },
+                class: "text-red-600 hover:underline text-sm" %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500">No one assigned yet.</p>
+    <% end %>
+  </div>
+</div>
