@@ -16,6 +16,20 @@ Volunteer scheduling for churches — integrates with Planning Center.
 - **Email Notifications** — Automatic notifications when volunteers are scheduled
 - **Planning Center Integration** — OAuth connection to import teams, people, and events from PCO
 
+## Screenshots
+
+### Teams
+![Teams](docs/screenshots/teams.png)
+
+### Events
+![Events](docs/screenshots/events.png)
+
+### Volunteer Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Planning Center Import
+![Import](docs/screenshots/import.png)
+
 ## Tech Stack
 
 - Ruby 3.2
@@ -64,17 +78,5 @@ planning_center:
 4. Click "Connect to Planning Center" in the app navigation
 5. Go to Import to sync teams, people, and events
 
-## Screenshots
-
-### Admin Dashboard
-Manage teams, positions, and events with an intuitive interface.
-
-### Volunteer Portal
-Volunteers can set their availability and respond to assignments.
-
-### Planning Center Import
-One-click import of teams, people, and scheduled events from PCO.
-
-## License
 
 MIT
