@@ -1,0 +1,34 @@
+<div class="max-w-2xl mx-auto py-8 px-4">
+  <div class="mb-6">
+    <%= link_to "← Back to #{@event.name}", admin_event_path(@event), class: "text-blue-600 hover:underline" %>
+  </div>
+
+  <h1 class="text-2xl font-bold mb-6">Add Assignment</h1>
+
+  <%= form_with model: [:admin, @event, @assignment], class: "space-y-4" do |f| %>
+    <% if @assignment.errors.any? %>
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <ul>
+          <% @assignment.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :user_id, "Volunteer", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :user_id, @users, :id, :display_name, { prompt: "Select a volunteer" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= f.label :position_id, "Position", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :position_id, @positions, :id, :name, { prompt: "Select a position" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div class="flex gap-2">
+      <%= f.submit "Assign", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
+      <%= link_to "Cancel", admin_event_path(@event), class: "bg-gray-200 px-4 py-2 rounded hover:bg-gray-300" %>
+    </div>
+  <% end %>
+</div>

@@ -9,4 +9,9 @@ class User < ApplicationRecord
   has_many :events, through: :assignments
 
   normalizes :email_address, with: -> (e) { e.strip.downcase }
+  validates :name, presence: true, on: :create
+
+  def display_name
+    name.presence || email_address
+  end
 end

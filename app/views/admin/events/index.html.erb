@@ -1,0 +1,27 @@
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Events</h1>
+    <%= link_to "New Event", new_admin_event_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+  </div>
+
+  <% if @events.any? %>
+    <div class="bg-white shadow rounded-lg divide-y">
+      <% @events.each do |event| %>
+        <div class="p-4 flex justify-between items-center">
+          <div>
+            <h2 class="font-semibold"><%= event.name %></h2>
+            <p class="text-gray-600 text-sm">
+              <%= event.team.name %> · <%= event.starts_at.strftime("%b %d, %Y at %l:%M %p") %>
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <%= link_to "View", admin_event_path(event), class: "text-blue-600 hover:underline" %>
+            <%= link_to "Edit", edit_admin_event_path(event), class: "text-gray-600 hover:underline" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500">No events yet. Create your first one!</p>
+  <% end %>
+</div>
