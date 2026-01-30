@@ -1,0 +1,44 @@
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-2xl font-bold mb-6">Import from Planning Center</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">Teams</h2>
+      <% if @pco_teams.any? %>
+        <ul class="space-y-2 mb-4">
+          <% @pco_teams.each do |team| %>
+            <li class="text-sm">
+              <%= team[:name] %>
+              <% if Team.exists?(name: team[:name]) %>
+                <span class="text-green-600">(already imported)</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <%= button_to "Import Teams", create_teams_admin_import_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+      <% else %>
+        <p class="text-gray-500">No teams found in Planning Center.</p>
+      <% end %>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">People</h2>
+      <% if @pco_people.any? %>
+        <ul class="space-y-2 mb-4 max-h-64 overflow-y-auto">
+          <% @pco_people.each do |person| %>
+            <li class="text-sm">
+              <%= person[:name] %>
+              <span class="text-gray-500"><%= person[:email] %></span>
+              <% if person[:email].present? && User.exists?(email_address: person[:email]) %>
+                <span class="text-green-600">(already imported)</span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <%= button_to "Import People", create_people_admin_import_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+      <% else %>
+        <p class="text-gray-500">No people found in Planning Center.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

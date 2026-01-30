@@ -32,6 +32,7 @@
             <span class="text-gray-400">Admin:</span>
             <%= link_to "Teams", admin_teams_path, class: "hover:text-gray-300" %>
             <%= link_to "Events", admin_events_path, class: "hover:text-gray-300" %>
+            <%= link_to "Import", admin_import_path, class: "hover:text-gray-300" %>
           </div>
           <div class="flex gap-4 text-sm">
             <span class="text-gray-400">Volunteer:</span>
@@ -39,6 +40,13 @@
             <%= link_to "Availability", volunteer_availabilities_path, class: "hover:text-gray-300" %>
             <%= link_to "Assignments", volunteer_assignments_path, class: "hover:text-gray-300" %>
           </div>
+        </div>
+        <div>
+          <% if session[:pco_access_token] %>
+            <span class="text-green-400 text-sm">✓ PCO Connected</span>
+          <% else %>
+            <%= link_to "Connect to Planning Center", planning_center_connect_path, class: "bg-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-700" %>
+          <% end %>
         </div>
       </div>
     </nav>
