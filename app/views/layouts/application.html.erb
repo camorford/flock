@@ -28,8 +28,17 @@
       <div class="max-w-4xl mx-auto flex justify-between items-center">
         <div class="flex items-center gap-6">
           <span class="font-bold text-lg">Flock</span>
-          <%= link_to "Teams", admin_teams_path, class: "hover:text-gray-300" %>
-          <%= link_to "Events", admin_events_path, class: "hover:text-gray-300" %>
+          <div class="flex gap-4 text-sm">
+            <span class="text-gray-400">Admin:</span>
+            <%= link_to "Teams", admin_teams_path, class: "hover:text-gray-300" %>
+            <%= link_to "Events", admin_events_path, class: "hover:text-gray-300" %>
+          </div>
+          <div class="flex gap-4 text-sm">
+            <span class="text-gray-400">Volunteer:</span>
+            <%= link_to "Dashboard", volunteer_root_path, class: "hover:text-gray-300" %>
+            <%= link_to "Availability", volunteer_availabilities_path, class: "hover:text-gray-300" %>
+            <%= link_to "Assignments", volunteer_assignments_path, class: "hover:text-gray-300" %>
+          </div>
         </div>
       </div>
     </nav>

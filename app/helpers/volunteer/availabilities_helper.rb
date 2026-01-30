@@ -1,0 +1,2 @@
+module Volunteer::AvailabilitiesHelper
+end
