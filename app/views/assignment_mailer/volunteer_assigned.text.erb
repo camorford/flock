@@ -1,0 +1,12 @@
+Hi <%= @user.display_name %>,
+
+You've been scheduled to serve!
+
+Event: <%= @event.name %>
+Position: <%= @position.name %>
+Team: <%= @event.team.name %>
+When: <%= @event.starts_at.strftime("%A, %B %d, %Y at %l:%M %p") %>
+
+Please log in to confirm or decline this assignment.
+
+Thanks for serving!
