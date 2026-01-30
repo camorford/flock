@@ -11,6 +11,7 @@ class Admin::AssignmentsController < ApplicationController
     @assignment = @event.assignments.new(assignment_params)
     
     if check_conflicts && @assignment.save
+      AssignmentMailer.volunteer_assigned(@assignment).deliver_later
       redirect_to admin_event_path(@event), notice: "Assignment created."
     else
       @positions = @event.team.positions
