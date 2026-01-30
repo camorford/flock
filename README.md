@@ -2,15 +2,19 @@
 
 Volunteer scheduling for churches — integrates with Planning Center.
 
+![Ruby](https://img.shields.io/badge/Ruby-3.2-red)
+![Rails](https://img.shields.io/badge/Rails-8.0-red)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
 ## Features
 
-- **Team & Position Management** — Create teams and define positions (e.g., Worship Team → Lead Vocals, Guitar, Sound Tech)
+- **Team & Position Management** — Create ministry teams and define volunteer positions
 - **Event Scheduling** — Schedule events and assign volunteers to positions
 - **Availability Management** — Volunteers set their weekly availability
-- **Conflict Detection** — Warns when scheduling volunteers outside their available times
-- **Assignment Workflow** — Volunteers can confirm or decline assignments
-- **Email Notifications** — Automatic emails when volunteers are assigned
-- **Planning Center Integration** — OAuth connection to import teams and people from PCO
+- **Conflict Detection** — Prevents scheduling volunteers outside their available times
+- **Assignment Workflow** — Volunteers can confirm or decline assignments via email
+- **Email Notifications** — Automatic notifications when volunteers are scheduled
+- **Planning Center Integration** — OAuth connection to import teams, people, and events from PCO
 
 ## Tech Stack
 
@@ -20,7 +24,15 @@ Volunteer scheduling for churches — integrates with Planning Center.
 - Tailwind CSS
 - Hotwire/Turbo
 
-## Setup
+## Getting Started
+
+### Prerequisites
+
+- Ruby 3.2+
+- PostgreSQL
+- Node.js
+
+### Installation
 ```bash
 git clone https://github.com/camorford/flock.git
 cd flock
@@ -29,13 +41,17 @@ bin/rails db:setup
 bin/dev
 ```
 
+Visit `http://localhost:3000`
+
 ## Planning Center Integration
 
-To enable PCO sync:
+Flock connects to Planning Center via OAuth to sync your existing data.
+
+### Setup
 
 1. Create an OAuth app at [api.planningcenteronline.com](https://api.planningcenteronline.com/oauth/applications)
 2. Set the callback URL to `http://localhost:3000/auth/planning_center/callback`
-3. Add credentials:
+3. Add your credentials:
 ```bash
 bin/rails credentials:edit
 ```
@@ -45,11 +61,19 @@ planning_center:
   client_secret: your_client_secret
 ```
 
-4. Click "Connect to Planning Center" in the app nav
+4. Click "Connect to Planning Center" in the app navigation
+5. Go to Import to sync teams, people, and events
 
 ## Screenshots
 
-[Add screenshots here]
+### Admin Dashboard
+Manage teams, positions, and events with an intuitive interface.
+
+### Volunteer Portal
+Volunteers can set their availability and respond to assignments.
+
+### Planning Center Import
+One-click import of teams, people, and scheduled events from PCO.
 
 ## License
 
