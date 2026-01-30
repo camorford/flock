@@ -1,40 +1,76 @@
-<div class="max-w-4xl mx-auto py-8 px-4">
-  <h1 class="text-2xl font-bold mb-6">My Assignments</h1>
+<div class="max-w-5xl mx-auto py-8 px-4">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">My Assignments</h1>
+    <p class="text-gray-500 mt-1">View and respond to your scheduled events</p>
+  </div>
 
   <% if @assignments.any? %>
-    <div class="bg-white shadow rounded-lg divide-y">
-      <% @assignments.each do |assignment| %>
-        <div class="p-4 flex justify-between items-center">
-          <div>
-            <p class="font-semibold"><%= assignment.event.name %></p>
-            <p class="text-sm text-gray-600">
-              <%= assignment.position.name %> · <%= assignment.event.team.name %>
-            </p>
-            <p class="text-sm text-gray-500">
-              <%= assignment.event.starts_at.strftime("%A, %b %d at %l:%M %p") %>
-            </p>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="divide-y divide-gray-100">
+        <% @assignments.each do |assignment| %>
+          <div class="p-5 hover:bg-gray-50 transition">
+            <div class="flex justify-between items-start">
+              <div class="flex gap-4">
+                <div class="w-14 h-14 bg-purple-100 rounded-xl flex flex-col items-center justify-center text-purple-700">
+                  <span class="text-xs font-medium uppercase"><%= assignment.event.starts_at.strftime("%b") %></span>
+                  <span class="text-xl font-bold leading-none"><%= assignment.event.starts_at.strftime("%d") %></span>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-900"><%= assignment.event.name %></p>
+                  <p class="text-gray-500 text-sm">
+                    <%= assignment.position.name %> • <%= assignment.event.team.name %>
+                  </p>
+                  <p class="text-gray-400 text-sm">
+                    <%= assignment.event.starts_at.strftime("%A, %l:%M %p") %>
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3">
+                <% if assignment.pending? %>
+                  <%= button_to volunteer_assignment_path(assignment), 
+                      method: :patch, 
+                      params: { assignment: { status: :confirmed } },
+                      class: "inline-flex items-center gap-1 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition" do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Confirm
+                  <% end %>
+                  <%= button_to volunteer_assignment_path(assignment), 
+                      method: :patch, 
+                      params: { assignment: { status: :declined } },
+                      class: "inline-flex items-center gap-1 bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-100 transition" do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    Decline
+                  <% end %>
+                <% else %>
+                  <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium <%= assignment.confirmed? ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                    <% if assignment.confirmed? %>
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    <% end %>
+                    <%= assignment.status.capitalize %>
+                  </span>
+                <% end %>
+              </div>
+            </div>
           </div>
-          <div class="flex items-center gap-3">
-            <span class="px-2 py-1 text-xs rounded <%= assignment_status_class(assignment) %>">
-              <%= assignment.status.capitalize %>
-            </span>
-            <% if assignment.pending? %>
-              <%= button_to "Confirm", volunteer_assignment_path(assignment), 
-                  method: :patch, 
-                  params: { assignment: { status: :confirmed } },
-                  class: "bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700" %>
-              <%= button_to "Decline", volunteer_assignment_path(assignment), 
-                  method: :patch, 
-                  params: { assignment: { status: :declined } },
-                  class: "bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
   <% else %>
-    <div class="bg-white shadow rounded-lg p-6">
-      <p class="text-gray-500">No assignments yet.</p>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900">No assignments yet</h3>
+      <p class="text-gray-500 mt-1">You'll see your scheduled events here once you're assigned.</p>
     </div>
   <% end %>
 </div>

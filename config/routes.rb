@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resource :import, only: [:show] do
       post :create_teams
       post :create_people
+      post :create_events
     end
   end
 

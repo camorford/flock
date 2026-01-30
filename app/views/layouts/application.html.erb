@@ -1,64 +1,83 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Volunteer Scheduler" %></title>
+    <title>Flock</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Volunteer Scheduler">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <nav class="bg-gray-800 text-white px-4 py-3">
-      <div class="max-w-4xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-6">
-          <span class="font-bold text-lg">Flock</span>
-          <div class="flex gap-4 text-sm">
-            <span class="text-gray-400">Admin:</span>
-            <%= link_to "Teams", admin_teams_path, class: "hover:text-gray-300" %>
-            <%= link_to "Events", admin_events_path, class: "hover:text-gray-300" %>
-            <%= link_to "Import", admin_import_path, class: "hover:text-gray-300" %>
+  <body class="bg-gray-50 min-h-screen">
+    <nav class="bg-gradient-to-r from-purple-700 to-purple-900 text-white shadow-lg">
+      <div class="max-w-5xl mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-8">
+            <%= link_to root_path, class: "flex items-center gap-2 hover:opacity-90" do %>
+              <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <span class="font-bold text-xl tracking-tight">Flock</span>
+            <% end %>
+            
+            <div class="hidden md:flex items-center gap-6 text-sm">
+              <div class="flex items-center gap-4">
+                <%= link_to "Teams", admin_teams_path, class: "hover:text-purple-200 transition" %>
+                <%= link_to "Events", admin_events_path, class: "hover:text-purple-200 transition" %>
+                <%= link_to "Import", admin_import_path, class: "hover:text-purple-200 transition" %>
+              </div>
+              <span class="text-purple-400">|</span>
+              <div class="flex items-center gap-4">
+                <%= link_to "Dashboard", volunteer_root_path, class: "hover:text-purple-200 transition" %>
+                <%= link_to "Availability", volunteer_availabilities_path, class: "hover:text-purple-200 transition" %>
+                <%= link_to "Assignments", volunteer_assignments_path, class: "hover:text-purple-200 transition" %>
+              </div>
+            </div>
           </div>
-          <div class="flex gap-4 text-sm">
-            <span class="text-gray-400">Volunteer:</span>
-            <%= link_to "Dashboard", volunteer_root_path, class: "hover:text-gray-300" %>
-            <%= link_to "Availability", volunteer_availabilities_path, class: "hover:text-gray-300" %>
-            <%= link_to "Assignments", volunteer_assignments_path, class: "hover:text-gray-300" %>
+          
+          <div>
+            <% if session[:pco_access_token] %>
+              <span class="flex items-center gap-2 text-sm bg-purple-600/50 px-3 py-1.5 rounded-full">
+                <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                PCO Connected
+              </span>
+            <% else %>
+              <%= link_to planning_center_connect_path, class: "flex items-center gap-2 bg-white text-purple-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-50 transition" do %>
+                Connect to Planning Center
+              <% end %>
+            <% end %>
           </div>
-        </div>
-        <div>
-          <% if session[:pco_access_token] %>
-            <span class="text-green-400 text-sm">✓ PCO Connected</span>
-          <% else %>
-            <%= link_to "Connect to Planning Center", planning_center_connect_path, class: "bg-blue-600 px-3 py-1 rounded text-sm hover:bg-blue-700" %>
-          <% end %>
         </div>
       </div>
     </nav>
 
     <% if notice.present? %>
-      <div class="max-w-4xl mx-auto mt-4 px-4">
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+      <div class="max-w-5xl mx-auto mt-4 px-4">
+        <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
           <%= notice %>
         </div>
       </div>
     <% end %>
 
-    <%= yield %>
+    <% if alert.present? %>
+      <div class="max-w-5xl mx-auto mt-4 px-4">
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          <%= alert %>
+        </div>
+      </div>
+    <% end %>
+
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

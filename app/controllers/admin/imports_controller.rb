@@ -5,6 +5,7 @@ class Admin::ImportsController < ApplicationController
     service = PlanningCenterService.new(session[:pco_access_token])
     @pco_teams = service.fetch_teams
     @pco_people = service.fetch_people
+    @pco_plans = service.fetch_plans
   end
 
   def create_teams
@@ -41,6 +42,34 @@ class Admin::ImportsController < ApplicationController
     end
     
     redirect_to admin_import_path, notice: "Imported #{imported} new people from Planning Center."
+  end
+
+  def create_events
+    service = PlanningCenterService.new(session[:pco_access_token])
+    plans = service.fetch_plans
+    
+    imported = 0
+    plans.each do |plan_data|
+      next if plan_data[:starts_at].blank?
+      
+      team = Team.find_or_create_by(name: plan_data[:team_name])
+      
+      starts_at = Time.parse(plan_data[:starts_at])
+      event = Event.find_or_initialize_by(
+        name: plan_data[:name],
+        team: team,
+        starts_at: starts_at
+      )
+      
+      if event.new_record?
+        event.ends_at = starts_at + 2.hours
+        if event.save
+          imported += 1
+        end
+      end
+    end
+    
+    redirect_to admin_import_path, notice: "Imported #{imported} new events from Planning Center."
   end
 
   private
