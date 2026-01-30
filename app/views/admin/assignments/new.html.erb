@@ -1,34 +1,47 @@
 <div class="max-w-2xl mx-auto py-8 px-4">
   <div class="mb-6">
-    <%= link_to "← Back to #{@event.name}", admin_event_path(@event), class: "text-blue-600 hover:underline" %>
+    <%= link_to admin_event_path(@event), class: "inline-flex items-center gap-1 text-purple-600 hover:text-purple-800 text-sm font-medium" do %>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to <%= @event.name %>
+    <% end %>
   </div>
 
-  <h1 class="text-2xl font-bold mb-6">Add Assignment</h1>
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Add Assignment</h1>
 
-  <%= form_with model: [:admin, @event, @assignment], class: "space-y-4" do |f| %>
-    <% if @assignment.errors.any? %>
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        <ul>
-          <% @assignment.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
+    <%= form_with model: [:admin, @event, @assignment], class: "space-y-6" do |f| %>
+      <% if @assignment.errors.any? %>
+        <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+          <div class="flex items-center gap-2 mb-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span class="font-medium">Unable to create assignment:</span>
+          </div>
+          <ul class="list-disc list-inside text-sm">
+            <% @assignment.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= f.label :user_id, "Volunteer", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.collection_select :user_id, @users, :id, :display_name, { prompt: "Select a volunteer" }, class: "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" %>
+      </div>
+
+      <div>
+        <%= f.label :position_id, "Position", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.collection_select :position_id, @positions, :id, :name, { prompt: "Select a position" }, class: "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" %>
+      </div>
+
+      <div class="flex items-center gap-3 pt-4">
+        <%= f.submit "Assign Volunteer", class: "inline-flex items-center gap-2 bg-purple-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-purple-700 transition cursor-pointer" %>
+        <%= link_to "Cancel", admin_event_path(@event), class: "inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-6 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition" %>
       </div>
     <% end %>
-
-    <div>
-      <%= f.label :user_id, "Volunteer", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.collection_select :user_id, @users, :id, :display_name, { prompt: "Select a volunteer" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
-    </div>
-
-    <div>
-      <%= f.label :position_id, "Position", class: "block text-sm font-medium text-gray-700" %>
-      <%= f.collection_select :position_id, @positions, :id, :name, { prompt: "Select a position" }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
-    </div>
-
-    <div class="flex gap-2">
-      <%= f.submit "Assign", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
-      <%= link_to "Cancel", admin_event_path(@event), class: "bg-gray-200 px-4 py-2 rounded hover:bg-gray-300" %>
-    </div>
-  <% end %>
+  </div>
 </div>

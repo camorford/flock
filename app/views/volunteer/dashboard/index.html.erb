@@ -1,42 +1,79 @@
-<div class="max-w-4xl mx-auto py-8 px-4">
-  <h1 class="text-2xl font-bold mb-6">Welcome, <%= Current.user.display_name %>!</h1>
+<div class="max-w-5xl mx-auto py-8 px-4">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Welcome back, <%= Current.user.display_name %>!</h1>
+    <p class="text-gray-500 mt-1">Here's an overview of your upcoming schedule</p>
+  </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="bg-white shadow rounded-lg p-6">
-      <h2 class="text-lg font-semibold mb-4">Upcoming Assignments</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">Upcoming Assignments</h2>
+        <%= link_to volunteer_assignments_path, class: "text-purple-600 hover:text-purple-800 text-sm font-medium" do %>
+          View all →
+        <% end %>
+      </div>
+      
       <% if @upcoming_assignments.any? %>
-        <ul class="space-y-3">
+        <div class="space-y-4">
           <% @upcoming_assignments.limit(5).each do |assignment| %>
-            <li class="border-l-4 <%= assignment.confirmed? ? 'border-green-500' : 'border-yellow-500' %> pl-3">
-              <p class="font-medium"><%= assignment.event.name %></p>
-              <p class="text-sm text-gray-600">
-                <%= assignment.position.name %> · <%= assignment.event.starts_at.strftime("%b %d at %l:%M %p") %>
-              </p>
-            </li>
+            <div class="flex items-start gap-4 p-3 rounded-lg <%= assignment.confirmed? ? 'bg-green-50' : 'bg-yellow-50' %>">
+              <div class="w-12 h-12 bg-white rounded-lg flex flex-col items-center justify-center text-purple-700 shadow-sm">
+                <span class="text-xs font-medium uppercase"><%= assignment.event.starts_at.strftime("%b") %></span>
+                <span class="text-lg font-bold leading-none"><%= assignment.event.starts_at.strftime("%d") %></span>
+              </div>
+              <div class="flex-1">
+                <p class="font-medium text-gray-900"><%= assignment.event.name %></p>
+                <p class="text-sm text-gray-500"><%= assignment.position.name %> • <%= assignment.event.starts_at.strftime("%l:%M %p") %></p>
+              </div>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium <%= assignment.confirmed? ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                <%= assignment.status.capitalize %>
+              </span>
+            </div>
           <% end %>
-        </ul>
-        <%= link_to "View all assignments", volunteer_assignments_path, class: "text-blue-600 hover:underline text-sm mt-4 inline-block" %>
+        </div>
       <% else %>
-        <p class="text-gray-500">No upcoming assignments.</p>
+        <div class="text-center py-8">
+          <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <p class="text-gray-500">No upcoming assignments</p>
+        </div>
       <% end %>
     </div>
 
-    <div class="bg-white shadow rounded-lg p-6">
-      <h2 class="text-lg font-semibold mb-4">My Availability</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">My Availability</h2>
+        <%= link_to volunteer_availabilities_path, class: "text-purple-600 hover:text-purple-800 text-sm font-medium" do %>
+          Manage →
+        <% end %>
+      </div>
+      
       <% availabilities = Current.user.availabilities.order(:day_of_week) %>
       <% if availabilities.any? %>
-        <ul class="space-y-2">
+        <div class="space-y-3">
           <% availabilities.each do |avail| %>
-            <li class="text-sm">
-              <span class="font-medium"><%= avail.day_of_week.capitalize %></span>
-              <span class="text-gray-600"><%= avail.start_time.strftime("%l:%M %p") %> - <%= avail.end_time.strftime("%l:%M %p") %></span>
-            </li>
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <span class="font-medium text-gray-900"><%= avail.day_of_week.capitalize %></span>
+              <span class="text-gray-500 text-sm">
+                <%= avail.start_time.strftime("%l:%M %p") %> - <%= avail.end_time.strftime("%l:%M %p") %>
+              </span>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <p class="text-gray-500">No availability set.</p>
+        <div class="text-center py-8">
+          <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <p class="text-gray-500 mb-3">No availability set</p>
+          <%= link_to "Set Availability", new_volunteer_availability_path, class: "text-purple-600 hover:text-purple-800 text-sm font-medium" %>
+        </div>
       <% end %>
-      <%= link_to "Manage availability", volunteer_availabilities_path, class: "text-blue-600 hover:underline text-sm mt-4 inline-block" %>
     </div>
   </div>
 </div>

@@ -1,25 +1,62 @@
-<div class="max-w-4xl mx-auto py-8 px-4">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Teams</h1>
-    <%= link_to "New Team", new_admin_team_path, class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" %>
+<div class="max-w-5xl mx-auto py-8 px-4">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Teams</h1>
+      <p class="text-gray-500 mt-1">Manage your ministry teams and positions</p>
+    </div>
+    <%= link_to new_admin_team_path, class: "inline-flex items-center gap-2 bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-purple-700 transition shadow-sm" do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Team
+    <% end %>
   </div>
 
   <% if @teams.any? %>
-    <div class="bg-white shadow rounded-lg divide-y">
+    <div class="grid gap-4">
       <% @teams.each do |team| %>
-        <div class="p-4 flex justify-between items-center">
-          <div>
-            <h2 class="font-semibold"><%= team.name %></h2>
-            <p class="text-gray-600 text-sm"><%= team.description %></p>
-          </div>
-          <div class="flex gap-2">
-            <%= link_to "View", admin_team_path(team), class: "text-blue-600 hover:underline" %>
-            <%= link_to "Edit", edit_admin_team_path(team), class: "text-gray-600 hover:underline" %>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <h2 class="text-xl font-semibold text-gray-900"><%= team.name %></h2>
+              <p class="text-gray-500 mt-1"><%= team.description %></p>
+              <div class="flex items-center gap-4 mt-3">
+                <span class="inline-flex items-center gap-1 text-sm text-gray-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                  <%= team.positions.count %> positions
+                </span>
+                <span class="inline-flex items-center gap-1 text-sm text-gray-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <%= team.events.count %> events
+                </span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <%= link_to admin_team_path(team), class: "inline-flex items-center gap-1 text-purple-600 hover:text-purple-800 font-medium text-sm" do %>
+                View
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              <% end %>
+            </div>
           </div>
         </div>
       <% end %>
     </div>
   <% else %>
-    <p class="text-gray-500">No teams yet. Create your first one!</p>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900">No teams yet</h3>
+      <p class="text-gray-500 mt-1">Get started by creating your first ministry team.</p>
+      <%= link_to "Create Team", new_admin_team_path, class: "inline-flex items-center gap-2 bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-purple-700 transition shadow-sm mt-4" %>
+    </div>
   <% end %>
 </div>

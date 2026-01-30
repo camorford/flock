@@ -1,29 +1,73 @@
-<div class="max-w-2xl mx-auto py-8 px-4">
-  <div class="mb-6">
-    <%= link_to "← Back to #{@team.name}", admin_team_path(@team), class: "text-blue-600 hover:underline" %>
+<div class="max-w-5xl mx-auto py-8 px-4">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Events</h1>
+      <p class="text-gray-500 mt-1">Schedule and manage your ministry events</p>
+    </div>
+    <%= link_to new_admin_event_path, class: "inline-flex items-center gap-2 bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-purple-700 transition shadow-sm" do %>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Event
+    <% end %>
   </div>
 
-  <h1 class="text-2xl font-bold mb-6">Add Position to <%= @team.name %></h1>
-
-  <%= form_with model: [:admin, @team, @position], class: "space-y-4" do |f| %>
-    <% if @position.errors.any? %>
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-        <ul>
-          <% @position.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-    <div>
-      <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
-      <%= f.text_field :name, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "e.g. Sound Tech, Lead Vocals" %>
+  <% if @events.any? %>
+    <div class="grid gap-4">
+      <% @events.each do |event| %>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition">
+          <div class="flex justify-between items-start">
+            <div class="flex gap-4">
+              <div class="w-14 h-14 bg-purple-100 rounded-xl flex flex-col items-center justify-center text-purple-700">
+                <span class="text-xs font-medium uppercase"><%= event.starts_at.strftime("%b") %></span>
+                <span class="text-xl font-bold leading-none"><%= event.starts_at.strftime("%d") %></span>
+              </div>
+              <div>
+                <h2 class="text-xl font-semibold text-gray-900"><%= event.name %></h2>
+                <p class="text-gray-500 mt-1">
+                  <span class="inline-flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <%= event.team.name %>
+                  </span>
+                  <span class="mx-2 text-gray-300">•</span>
+                  <span class="inline-flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <%= event.starts_at.strftime("%l:%M %p") %>
+                  </span>
+                </p>
+                <div class="mt-2">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    <%= event.assignments.count %> assigned
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <%= link_to admin_event_path(event), class: "inline-flex items-center gap-1 text-purple-600 hover:text-purple-800 font-medium text-sm" do %>
+                View
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </div>
-
-    <div class="flex gap-2">
-      <%= f.submit "Add Position", class: "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer" %>
-      <%= link_to "Cancel", admin_team_path(@team), class: "bg-gray-200 px-4 py-2 rounded hover:bg-gray-300" %>
+  <% else %>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+      <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-gray-900">No events yet</h3>
+      <p class="text-gray-500 mt-1">Get started by scheduling your first event.</p>
+      <%= link_to "Create Event", new_admin_event_path, class: "inline-flex items-center gap-2 bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-purple-700 transition shadow-sm mt-4" %>
     </div>
   <% end %>
 </div>
