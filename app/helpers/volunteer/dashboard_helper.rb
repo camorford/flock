@@ -1,0 +1,2 @@
+module Volunteer::DashboardHelper
+end

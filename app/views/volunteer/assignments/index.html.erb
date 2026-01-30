@@ -1,0 +1,40 @@
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-2xl font-bold mb-6">My Assignments</h1>
+
+  <% if @assignments.any? %>
+    <div class="bg-white shadow rounded-lg divide-y">
+      <% @assignments.each do |assignment| %>
+        <div class="p-4 flex justify-between items-center">
+          <div>
+            <p class="font-semibold"><%= assignment.event.name %></p>
+            <p class="text-sm text-gray-600">
+              <%= assignment.position.name %> · <%= assignment.event.team.name %>
+            </p>
+            <p class="text-sm text-gray-500">
+              <%= assignment.event.starts_at.strftime("%A, %b %d at %l:%M %p") %>
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-1 text-xs rounded <%= assignment_status_class(assignment) %>">
+              <%= assignment.status.capitalize %>
+            </span>
+            <% if assignment.pending? %>
+              <%= button_to "Confirm", volunteer_assignment_path(assignment), 
+                  method: :patch, 
+                  params: { assignment: { status: :confirmed } },
+                  class: "bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700" %>
+              <%= button_to "Decline", volunteer_assignment_path(assignment), 
+                  method: :patch, 
+                  params: { assignment: { status: :declined } },
+                  class: "bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white shadow rounded-lg p-6">
+      <p class="text-gray-500">No assignments yet.</p>
+    </div>
+  <% end %>
+</div>

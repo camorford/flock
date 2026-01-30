@@ -1,0 +1,42 @@
+<div class="max-w-4xl mx-auto py-8 px-4">
+  <h1 class="text-2xl font-bold mb-6">Welcome, <%= Current.user.display_name %>!</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">Upcoming Assignments</h2>
+      <% if @upcoming_assignments.any? %>
+        <ul class="space-y-3">
+          <% @upcoming_assignments.limit(5).each do |assignment| %>
+            <li class="border-l-4 <%= assignment.confirmed? ? 'border-green-500' : 'border-yellow-500' %> pl-3">
+              <p class="font-medium"><%= assignment.event.name %></p>
+              <p class="text-sm text-gray-600">
+                <%= assignment.position.name %> · <%= assignment.event.starts_at.strftime("%b %d at %l:%M %p") %>
+              </p>
+            </li>
+          <% end %>
+        </ul>
+        <%= link_to "View all assignments", volunteer_assignments_path, class: "text-blue-600 hover:underline text-sm mt-4 inline-block" %>
+      <% else %>
+        <p class="text-gray-500">No upcoming assignments.</p>
+      <% end %>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4">My Availability</h2>
+      <% availabilities = Current.user.availabilities.order(:day_of_week) %>
+      <% if availabilities.any? %>
+        <ul class="space-y-2">
+          <% availabilities.each do |avail| %>
+            <li class="text-sm">
+              <span class="font-medium"><%= avail.day_of_week.capitalize %></span>
+              <span class="text-gray-600"><%= avail.start_time.strftime("%l:%M %p") %> - <%= avail.end_time.strftime("%l:%M %p") %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-gray-500">No availability set.</p>
+      <% end %>
+      <%= link_to "Manage availability", volunteer_availabilities_path, class: "text-blue-600 hover:underline text-sm mt-4 inline-block" %>
+    </div>
+  </div>
+</div>
